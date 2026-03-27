@@ -1,0 +1,28 @@
+{
+  "name": "@document-intelligence/indexer-service",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "NODE_APP=indexer-service tsx watch src/main.ts",
+    "build": "tsc",
+    "start": "node dist/main.js",
+    "lint": "tsc --noEmit"
+  },
+  "dependencies": {
+    "canvas": "^3.2.2",
+    "chromadb": "^1.10.5",
+    "dotenv": "^16.4.7",
+    "kafkajs": "^2.2.4",
+    "mammoth": "^1.8.0",
+    "openai": "^4.87.0",
+    "pdfjs-dist": "^4.10.38",
+    "uuid": "^11.1.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.13.10",
+    "@types/uuid": "^10.0.0",
+    "tsx": "^4.19.3",
+    "typescript": "^5.7.3"
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "name": "document-intelligence",
+  "version": "1.0.0",
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "concurrently \"npm run dev -w packages/api-service\" \"npm run dev -w packages/indexer-service\" \"npm run dev -w packages/web-app\"",
+    "build": "npm run build --workspaces --if-present",
+    "test": "npm test -w packages/tests",
+    "lint": "npm run lint --workspaces --if-present",
+    "start:api": "npm run stop:api && cd packages/api-service && npm run dev",
+    "start:indexer": "npm run stop:indexer && cd packages/indexer-service && npm run dev",
+    "start:webapp": "npm run stop:webapp && cd packages/web-app && npm run dev",
+    "stop:api": "lsof -ti :3002 | xargs kill -9 2>/dev/null || true",
+    "stop:indexer": "pkill -9 -f 'NODE_APP=indexer-service' 2>/dev/null; true",
+    "stop:webapp": "for p in 5173 5174 5175 5176; do lsof -ti :$p | xargs kill -9 2>/dev/null; done; true",
+    "stop": "npm run stop:api && npm run stop:indexer && npm run stop:webapp"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.0",
+    "typescript": "^5.7.3"
+  }
+}
