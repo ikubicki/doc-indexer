@@ -5,8 +5,8 @@ let client: OpenAI | null = null;
 function getClient(): OpenAI {
   if (!client) {
     client = new OpenAI({
-      baseURL: process.env.LM_STUDIO_BASE_URL ?? 'http://localhost:1234/v1',
-      apiKey: 'lm-studio',
+      baseURL: process.env.LITELLM_BASE_URL ?? 'http://localhost:4000/v1',
+      apiKey: process.env.LITELLM_API_KEY ?? 'sk-ikubicki',
     });
   }
   return client;
@@ -19,7 +19,7 @@ const TASK_PREFIX: Record<string, string> = {
 };
 
 export async function generateEmbedding(text: string, mode: 'query' | 'document' = 'document'): Promise<number[]> {
-  const model = process.env.LM_STUDIO_EMBED_MODEL ?? 'nomic-embed-text-v1.5-GGUF';
+  const model = process.env.LITELLM_EMBED_MODEL ?? 'embedding';
   const input = TASK_PREFIX[mode] + text;
 
   const response = await getClient().embeddings.create({

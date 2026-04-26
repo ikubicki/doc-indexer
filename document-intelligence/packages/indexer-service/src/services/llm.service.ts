@@ -6,8 +6,8 @@ let client: OpenAI | null = null;
 function getClient(): OpenAI {
   if (!client) {
     client = new OpenAI({
-      baseURL: process.env.LM_STUDIO_BASE_URL ?? 'http://localhost:1234/v1',
-      apiKey: 'lm-studio',
+      baseURL: process.env.LITELLM_BASE_URL ?? 'http://localhost:4000/v1',
+      apiKey: process.env.LITELLM_API_KEY ?? 'sk-ikubicki',
     });
   }
   return client;
@@ -114,7 +114,7 @@ async function analyseVisualDocument(filePath: string, mimeType: string): Promis
 
   // PDF rendering fell back to text extraction — route to text model instead
   if (usedFallbackText) {
-    const model = process.env.LM_STUDIO_TEXT_MODEL ?? 'gpt-oss-20b';
+    const model = process.env.LITELLM_TEXT_MODEL ?? 'gpt-oss-20b';
     const text = Buffer.from(base64, 'base64').toString('utf-8');
     const truncated = text.slice(0, 32_000);
 
@@ -141,7 +141,7 @@ async function analyseVisualDocument(filePath: string, mimeType: string): Promis
   }
 
   // Normal vision path
-  const model = process.env.LM_STUDIO_VISION_MODEL ?? 'qwen3-vl-8b';
+  const model = process.env.LITELLM_VISION_MODEL ?? 'qwen3-8b';
   const imageMediaType = mimeType === 'application/pdf' ? 'image/png' : mimeType as 'image/png' | 'image/jpeg';
   const visionPrompt = mimeType === 'application/pdf' ? PROMPT_PDF_VISUAL : PROMPT_IMAGE;
 
@@ -176,7 +176,7 @@ async function analyseVisualDocument(filePath: string, mimeType: string): Promis
 }
 
 async function analyseTextDocument(filePath: string): Promise<AnalysisResult> {
-  const model = process.env.LM_STUDIO_TEXT_MODEL ?? 'gpt-oss-20b';
+  const model = process.env.LITELLM_TEXT_MODEL ?? 'gpt-oss-20b';
   const text = await extractText(filePath);
 
   // Truncate to avoid context window overflow (~8k tokens ≈ 32k chars)
